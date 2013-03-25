@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hello">Hello World!</string>
+    <string name="app_name">Color Orbs</string>
+    <string name="words">These are words</string>
+    <string name="moreWords">More words?</string>
+    <string name="description">\'Round and \'round go the colors</string>
+    <string name="me">Ben</string>
+
+</resources>
