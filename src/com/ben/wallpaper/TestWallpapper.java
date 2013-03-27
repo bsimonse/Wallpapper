@@ -281,7 +281,7 @@ public class TestWallpapper extends WallpaperService {
         	float twoPi = 360.0f;
 			float cast = mTimeout;
 			frame += twoPi*(cast/1000.0f);
-			//frame = ((int)frame)%360;
+			while(frame > twoPi){frame-=twoPi;}
      
         	c.save();
         	
