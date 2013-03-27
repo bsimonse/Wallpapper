@@ -13,9 +13,6 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 
-/*
- * This animated wallpaper draws a rotating wireframe cube.
- */
 public class TestWallpapper extends WallpaperService {
 
     private final Handler mHandler = new Handler();
@@ -38,7 +35,7 @@ public class TestWallpapper extends WallpaperService {
         private long  mTimeout = 10;
         private int sparkleFrame = -1;
         private int sparkleFrameMax = 100;
-        private long startTime;
+        private float frame = 0;
         
         private int circleRadius = 25;
         private int mainLoopRadius = 170;
@@ -72,7 +69,6 @@ public class TestWallpapper extends WallpaperService {
         
         private int getIntermediate(int start, int end, float percent)
         {
-        	Log.i("Intermediate:",""+start+","+end+","+percent);
         	float dif = end-start;
         	return (int)(start+percent*dif);
         }
@@ -104,8 +100,6 @@ public class TestWallpapper extends WallpaperService {
             paint = bgPaint;
             paint.setColor(0x0a000000);
             paint.setStyle(Paint.Style.FILL);
-            
-            startTime = SystemClock.elapsedRealtime();
         }
 
         @Override
@@ -154,7 +148,6 @@ public class TestWallpapper extends WallpaperService {
                 float xStep, float yStep, int xPixels, int yPixels) {
             float pixels = -xPixels;
             
-            Log.i("Pixels:",""+pixels);
             //0, 135, 270, 405, 540
             if(pixels < 135)
             {
@@ -200,7 +193,6 @@ public class TestWallpapper extends WallpaperService {
             else if(pixels < 540)
             {
             	float percent = (pixels-405)/135;
-            	Log.i("Percent:",""+percent);
             	//0xffffff
 	            circ1Colors[1] = getIntermediate(0xff, 0x00, percent);
 	            circ1Colors[2] = getIntermediate(0xff, 0x33, percent);
@@ -229,12 +221,6 @@ public class TestWallpapper extends WallpaperService {
             
             paint = circleAltPaint;
             paint.setColor(buildColor(circ2Colors));
-            
-            
-            /*Log.i("---","---");
-            Log.i("offset:",""+xOffset);
-            Log.i("step:",""+xStep);
-            Log.i("pixels:",""+xPixels);*/
             
             drawFrame();
         }
@@ -287,22 +273,23 @@ public class TestWallpapper extends WallpaperService {
         void drawBG(Canvas c)
         {
         	c.drawRect(new Rect(0,0,mWidth,mHeight), bgPaint);
-        	//c.drawARGB();
         }
         
         void drawCircle(Canvas c)
         {
-        	long timeDif = (SystemClock.elapsedRealtime() - startTime)/mTimeout;
-        	//float frame = ((int)timeDif)%360;
-        	
+        	//long timeDif = (SystemClock.elapsedRealtime() - startTime)/mTimeout;
+        	float twoPi = 360.0f;
+			float cast = mTimeout;
+			frame += twoPi*(cast/1000.0f);
+			//frame = ((int)frame)%360;
+     
         	c.save();
         	
         	c.translate(mWidth/2, mHeight/2);
-        	c.rotate(timeDif*0.55f);
+        	c.rotate(frame*0.55f);
         	c.translate(mainLoopRadius, 0);
-        	c.rotate(-timeDif);
         	
-        	c.rotate(timeDif*2.5f);
+        	c.rotate(frame*1.5f);
         	
         	c.translate(subLoopRadius, 0);
         	c.drawArc(new RectF(-circleRadius, -circleRadius, circleRadius, circleRadius), 0, 360, false, circlePaint);
@@ -310,7 +297,6 @@ public class TestWallpapper extends WallpaperService {
         	c.translate(-2*subLoopRadius, 0);
         	c.drawArc(new RectF(-circleRadius, -circleRadius, circleRadius, circleRadius), 0, 360, false, circleAltPaint);
         	
-        	//c.rotate(-timeDif*5.5f);
         	c.restore();
         	
         }
