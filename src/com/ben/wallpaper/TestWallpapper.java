@@ -277,19 +277,21 @@ public class TestWallpapper extends WallpaperService {
         
         void drawCircle(Canvas c)
         {
-        	//long timeDif = (SystemClock.elapsedRealtime() - startTime)/mTimeout;
-        	float twoPi = 360.0f;
-			float cast = mTimeout;
-			frame += twoPi*(cast/1000.0f);
-			while(frame > twoPi){frame-=twoPi;}
+        	float fullCircle = 360.0f;
+			float bigRotateRate = 0.55f;
+			float smallRotateRate = 1.55f;
+			
+			float commonFactor = 10.0f*bigRotateRate*smallRotateRate*fullCircle;
+			frame += 3.0f;
+			while(frame > commonFactor){frame-=commonFactor;}
      
         	c.save();
         	
         	c.translate(mWidth/2, mHeight/2);
-        	c.rotate(frame*0.55f);
+        	c.rotate(frame*bigRotateRate);
         	c.translate(mainLoopRadius, 0);
         	
-        	c.rotate(frame*1.5f);
+        	c.rotate(frame*smallRotateRate);
         	
         	c.translate(subLoopRadius, 0);
         	c.drawArc(new RectF(-circleRadius, -circleRadius, circleRadius, circleRadius), 0, 360, false, circlePaint);
